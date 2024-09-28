@@ -70,7 +70,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
  */
 
 
-@TeleOp(name="FTC Starter Kit Example Robot (INTO THE DEEP)", group="Main")
+@TeleOp(name="Starter Bot TeleOp", group="Main")
 //@Disabled
 public class StarterBotTeleOp extends LinearOpMode {
 
@@ -80,9 +80,9 @@ public class StarterBotTeleOp extends LinearOpMode {
     DcMotor frontRightMotor = null;
     DcMotor backRightMotor = null;
 
-    public DcMotor  armMotor    = null; //the arm motor
-    public CRServo  intake      = null; //the active intake servo
-    public Servo    wrist       = null; //the wrist servo
+    DcMotor armMotor    = null; //the arm motor
+    CRServo intake      = null; //the active intake servo
+    Servo   wrist       = null; //the wrist servo
 
 
     /* This constant is the number of encoder ticks for each degree of rotation of the arm.
@@ -102,7 +102,7 @@ public class StarterBotTeleOp extends LinearOpMode {
     We divide that by 360 to get the counts per degree. Which is 7.46666666667.
 
     */
-    final double ARM_TICKS_PER_DEGREE = 7.4666666667; //exact fraction is (194481/9826)
+    final double ARM_TICKS_PER_DEGREE = 19.7924893140647; //exact fraction is (194481/9826)
 
 
     /* These constants hold the position that the arm is commanded to run to.
@@ -130,8 +130,8 @@ public class StarterBotTeleOp extends LinearOpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0.8333;
-    final double WRIST_FOLDED_OUT  = 0.5;
+    final double WRIST_FOLDED_IN   = 0;
+    final double WRIST_FOLDED_OUT  = 0.27;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
@@ -150,7 +150,7 @@ public class StarterBotTeleOp extends LinearOpMode {
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
 
-        armMotor   = hardwareMap.get(DcMotor.class, "left_arm"); //the arm motor
+        armMotor   = hardwareMap.get(DcMotor.class, "arm"); //the arm motor
 
         frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -204,6 +204,9 @@ public class StarterBotTeleOp extends LinearOpMode {
 
         /* Wait for the game driver to press play */
         waitForStart();
+
+        armMotor.setTargetPosition((int) ARM_CLEAR_BARRIER);
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         /* Run until the driver presses stop */
         while (opModeIsActive()) {
