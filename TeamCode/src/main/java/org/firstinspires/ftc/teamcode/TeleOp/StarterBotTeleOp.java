@@ -137,7 +137,7 @@ public class StarterBotTeleOp extends LinearOpMode {
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
 
     /* Variables that are used to set the arm to a specific position */
-    double armPosition = (int) ARM_COLLAPSED_INTO_ROBOT;
+    double armPosition = (int) ARM_CLEAR_BARRIER;
     double armPositionFudgeFactor;
 
 
@@ -204,9 +204,6 @@ public class StarterBotTeleOp extends LinearOpMode {
 
         /* Wait for the game driver to press play */
         waitForStart();
-
-        armMotor.setTargetPosition((int) ARM_CLEAR_BARRIER);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         /* Run until the driver presses stop */
         while (opModeIsActive()) {
