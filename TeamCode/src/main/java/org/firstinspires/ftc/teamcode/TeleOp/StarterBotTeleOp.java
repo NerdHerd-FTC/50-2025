@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -142,6 +143,12 @@ public class StarterBotTeleOp extends LinearOpMode {
     double armPosition = (int) ARM_WINCH_ROBOT;
     double armPositionFudgeFactor;
 
+    Gamepad gamepad1Previous = new Gamepad();
+    Gamepad gamepad1Current = new Gamepad();
+
+    Gamepad gamepad2Previous = new Gamepad();
+    Gamepad gamepad2Current = new Gamepad();
+
 
     @Override
     public void runOpMode() {
@@ -219,11 +226,28 @@ public class StarterBotTeleOp extends LinearOpMode {
 
         /* Run until the driver presses stop */
         while (opModeIsActive()) {
-            //Drive Code
 
-            double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-            double x = gamepad1.left_stick_x;
-            double rx = gamepad1.right_stick_x;
+            gamepad1Previous.copy(gamepad1Current);
+            gamepad1Current.copy(gamepad1);
+
+            gamepad2Previous.copy(gamepad2Current);
+            gamepad2Current.copy(gamepad2);
+
+            double y = 0;
+            double x = 0;
+            double rx = 0;
+
+            //Drive Code
+            if (gamepad2Current.left_stick_y > 0.1 || gamepad2Current.left_stick_x > 0.1 || gamepad2Current.right_stick_x > 0.1) {
+                y = -gamepad2Current.left_stick_y; // Remember, Y stick value is reversed
+                x = gamepad2Current.left_stick_x;
+                rx = gamepad2Current.right_stick_x;
+            } else {
+                y = -gamepad1Current.left_stick_y; // Remember, Y stick value is reversed
+                x = gamepad1Current.left_stick_x;
+                rx = gamepad1Current.right_stick_x;
+            }
+
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
@@ -231,7 +255,7 @@ public class StarterBotTeleOp extends LinearOpMode {
 
             double botHeading = (leftEncoder.getCurrentPosition() + rightEncoder.getCurrentPosition()) * (1/2000.0) * 5.936868007 * (1/16.5);
 
-            if (gamepad1.start) {
+            if (gamepad1Current.start || gamepad2Current.start) {
                 leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -282,15 +306,15 @@ public class StarterBotTeleOp extends LinearOpMode {
             three if statements, then it will set the intake servo's power to multiple speeds in
             one cycle. Which can cause strange behavior. */
 
-            if (gamepad1.a) {
-                intake.setPower(INTAKE_COLLECT);
-            }
-            else if (gamepad1.x) {
-                intake.setPower(INTAKE_OFF);
-            }
-            else if (gamepad1.b) {
-                intake.setPower(INTAKE_DEPOSIT);
-            }
+//            if (gamepad1.a) {
+//                intake.setPower(INTAKE_COLLECT);
+//            }
+//            if (gamepad1.b) {
+//                intake.setPower(INTAKE_OFF);
+//            }
+//            else if (gamepad1.x) {
+//                intake.setPower(INTAKE_DEPOSIT);
+//            }
 
 
             /* Here we create a "fudge factor" for the arm position.
@@ -300,8 +324,26 @@ public class StarterBotTeleOp extends LinearOpMode {
             both triggers an equal amount, they cancel and leave the arm at zero. But if one is larger
             than the other, it "wins out". This variable is then multiplied by our FUDGE_FACTOR.
             The FUDGE_FACTOR is the number of degrees that we can adjust the arm by with this function. */
+            double increaseArmPositionFudgeFactor = 0;
+            double decreaseArmPositionFudgeFactor = 0;
 
-            armPositionFudgeFactor = FUDGE_FACTOR * (gamepad1.right_trigger + (-gamepad1.left_trigger));
+            if (gamepad1Current.y || gamepad1Current.dpad_down) {
+                increaseArmPositionFudgeFactor = 1;
+            }
+
+            if (gamepad1Current.a || gamepad1Current.dpad_up) {
+                decreaseArmPositionFudgeFactor = 1;
+            }
+
+            if (gamepad2Current.right_trigger > 0.1) {
+                increaseArmPositionFudgeFactor = gamepad2Current.right_trigger;
+            }
+
+            if (gamepad2Current.left_trigger > 0.1) {
+                decreaseArmPositionFudgeFactor = gamepad2Current.left_trigger;
+            }
+
+            armPositionFudgeFactor = FUDGE_FACTOR * (increaseArmPositionFudgeFactor + (-decreaseArmPositionFudgeFactor));
 
 
 
@@ -312,27 +354,47 @@ public class StarterBotTeleOp extends LinearOpMode {
             it folds out the wrist to make sure it is in the correct orientation to intake, and it
             turns the intake on to the COLLECT mode.*/
 
-            if(gamepad1.right_bumper){
+            if (gamepad1Current.right_bumper){
                 /* This is the intaking/collecting arm position */
-                armPosition = ARM_COLLECT;
+                if (Math.abs(armPosition-ARM_CLEAR_BARRIER) <= 5)  {
+                    armPosition = ARM_COLLECT;
+                } else {
+                    armPosition = ARM_CLEAR_BARRIER;
+                }
+
                 wrist.setPosition(WRIST_FOLDED_OUT);
                 intake.setPower(INTAKE_COLLECT);
             }
 
-            else if (gamepad1.left_bumper){
-                    /* This is about 20° up from the collecting position to clear the barrier
-                    Note here that we don't set the wrist position or the intake power when we
-                    select this "mode", this means that the intake and wrist will continue what
-                    they were doing before we clicked left bumper. */
+            else if (gamepad1Current.right_trigger > 0.1) {
+                intake.setPower(INTAKE_OFF);
                 armPosition = ARM_CLEAR_BARRIER;
             }
 
-            else if (gamepad1.y){
+            else if (gamepad1Current.right_trigger > 0.1 && gamepad1Previous.right_trigger <= 0.1) {
+                if (Math.abs(intake.getPower() - INTAKE_COLLECT) < 0.1) {
+                    intake.setPower(INTAKE_OFF);
+                } else {
+                    intake.setPower(INTAKE_COLLECT);
+                }
+
+            }
+
+            else if (gamepad1Current.left_bumper){
                 /* This is the correct height to score the sample in the LOW BASKET */
                 armPosition = ARM_SCORE_SAMPLE_IN_LOW;
             }
 
-            else if (gamepad1.dpad_left) {
+            else if (gamepad1Current.left_trigger > 0.1 && gamepad1Previous.left_trigger <= 0.1) {
+                if (Math.abs(intake.getPower() - INTAKE_DEPOSIT) < 0.1) {
+                    intake.setPower(INTAKE_OFF);
+                } else {
+                    intake.setPower(INTAKE_DEPOSIT);
+                }
+
+            }
+
+            else if (gamepad1Current.dpad_left) {
                     /* This turns off the intake, folds in the wrist, and moves the arm
                     back to folded inside the robot. This is also the starting configuration */
                 armPosition = ARM_COLLAPSED_INTO_ROBOT;
@@ -340,20 +402,24 @@ public class StarterBotTeleOp extends LinearOpMode {
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
 
-            else if (gamepad1.dpad_right){
+            else if (gamepad1Current.dpad_right){
                 /* This is the correct height to score SPECIMEN on the HIGH CHAMBER */
                 armPosition = ARM_SCORE_SPECIMEN;
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
 
-            else if (gamepad1.dpad_up){
+            else if (gamepad2Current.dpad_up){
                 /* This sets the arm to vertical to hook onto the LOW RUNG for hanging */
                 armPosition = ARM_ATTACH_HANGING_HOOK;
                 intake.setPower(INTAKE_OFF);
                 wrist.setPosition(WRIST_FOLDED_IN);
             }
 
-            else if (gamepad1.dpad_down){
+            else if (gamepad2Current.dpad_right) {
+                armPosition = ARM_ATTACH_HANGING_HOOK + (15 * FUDGE_FACTOR);
+            }
+
+            else if (gamepad2Current.dpad_down){
                 /* this moves the arm down to lift the robot up once it has been hooked */
                 armPosition = ARM_WINCH_ROBOT;
                 intake.setPower(INTAKE_OFF);
