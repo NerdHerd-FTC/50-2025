@@ -79,6 +79,8 @@ public class StarterBotTeleOp extends LinearOpMode {
     DcMotor backLeftMotor = null;
     DcMotor frontRightMotor = null;
     DcMotor backRightMotor = null;
+    DcMotor leftEncoder = null;
+    DcMotor rightEncoder = null;
 
     DcMotor armMotor    = null; //the arm motor
     CRServo intake      = null; //the active intake servo
@@ -131,13 +133,13 @@ public class StarterBotTeleOp extends LinearOpMode {
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
     final double WRIST_FOLDED_IN   = 0;
-    final double WRIST_FOLDED_OUT  = 0.27;
+    final double WRIST_FOLDED_OUT  = 0.3;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
 
     /* Variables that are used to set the arm to a specific position */
-    double armPosition = (int) ARM_CLEAR_BARRIER;
+    double armPosition = (int) ARM_WINCH_ROBOT;
     double armPositionFudgeFactor;
 
 
@@ -150,12 +152,20 @@ public class StarterBotTeleOp extends LinearOpMode {
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
 
+
+
         armMotor   = hardwareMap.get(DcMotor.class, "arm"); //the arm motor
 
-        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        leftEncoder = frontLeftMotor;
+        rightEncoder = frontRightMotor;
 
 
         /* Setting zeroPowerBehavior to BRAKE enables a "brake mode". This causes the motor to slow down
@@ -193,17 +203,19 @@ public class StarterBotTeleOp extends LinearOpMode {
         telemetry.update();
 
         // Retrieve the IMU from the hardware map
-        IMU imu = hardwareMap.get(IMU.class, "imu");
-        // Adjust the orientation parameters to match your robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
+//        IMU imu = hardwareMap.get(IMU.class, "imu");
+//        // Adjust the orientation parameters to match your robot
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+//                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+//        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+//        imu.initialize(parameters);
 
 
         /* Wait for the game driver to press play */
         waitForStart();
+
+        wrist.setPosition(WRIST_FOLDED_OUT);
 
         /* Run until the driver presses stop */
         while (opModeIsActive()) {
@@ -216,11 +228,21 @@ public class StarterBotTeleOp extends LinearOpMode {
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
+
+            double botHeading = (leftEncoder.getCurrentPosition() + rightEncoder.getCurrentPosition()) * (1/2000.0) * 5.936868007 * (1/16.5);
+
             if (gamepad1.start) {
-                imu.resetYaw();
+                leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+                leftEncoder = frontLeftMotor;
+                rightEncoder = frontRightMotor;
             }
 
-            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
 
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -373,8 +395,11 @@ public class StarterBotTeleOp extends LinearOpMode {
 
 
             /* send telemetry to the driver of the arm's current position and target position */
+            telemetry.addData("Heading: : ", botHeading);
             telemetry.addData("armTarget: ", armMotor.getTargetPosition());
             telemetry.addData("arm Encoder: ", armMotor.getCurrentPosition());
+            telemetry.addData("Left Encoder: ", leftEncoder.getCurrentPosition());
+            telemetry.addData("Right Encoder: ", rightEncoder.getCurrentPosition());
             telemetry.update();
 
         }
