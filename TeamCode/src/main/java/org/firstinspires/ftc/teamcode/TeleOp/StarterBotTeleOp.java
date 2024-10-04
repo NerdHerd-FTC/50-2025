@@ -133,8 +133,8 @@ public class StarterBotTeleOp extends LinearOpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0;
-    final double WRIST_FOLDED_OUT  = 0.3;
+    final double WRIST_FOLDED_IN   = 0.04;
+    final double WRIST_FOLDED_OUT  = 0.34;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
@@ -237,8 +237,13 @@ public class StarterBotTeleOp extends LinearOpMode {
             double x = 0;
             double rx = 0;
 
+            double gamepadActiveValue = 0.1;
+
+            boolean gamepad2LeftStickActive = gamepad2Current.left_stick_y > gamepadActiveValue || gamepad2Current.left_stick_y < -gamepadActiveValue || gamepad2Current.left_stick_x > gamepadActiveValue || gamepad2Current.left_stick_x < -gamepadActiveValue;
+            boolean gamepad2RightStickActive = gamepad2Current.right_stick_x > 0.05 || gamepad2Current.right_stick_x < -gamepadActiveValue;
+
             //Drive Code
-            if (gamepad2Current.left_stick_y > 0.1 || gamepad2Current.left_stick_x > 0.1 || gamepad2Current.right_stick_x > 0.1) {
+            if (gamepad2LeftStickActive || gamepad2RightStickActive) {
                 y = -gamepad2Current.left_stick_y; // Remember, Y stick value is reversed
                 x = gamepad2Current.left_stick_x;
                 rx = gamepad2Current.right_stick_x;
@@ -354,7 +359,7 @@ public class StarterBotTeleOp extends LinearOpMode {
             it folds out the wrist to make sure it is in the correct orientation to intake, and it
             turns the intake on to the COLLECT mode.*/
 
-            if (gamepad1Current.right_bumper){
+            if (gamepad1Current.right_bumper && !gamepad1Previous.right_bumper){
                 /* This is the intaking/collecting arm position */
                 if (Math.abs(armPosition-ARM_CLEAR_BARRIER) <= 5)  {
                     armPosition = ARM_COLLECT;
@@ -366,10 +371,10 @@ public class StarterBotTeleOp extends LinearOpMode {
                 intake.setPower(INTAKE_COLLECT);
             }
 
-            else if (gamepad1Current.right_trigger > 0.1) {
-                intake.setPower(INTAKE_OFF);
-                armPosition = ARM_CLEAR_BARRIER;
-            }
+//            else if (gamepad1Current.right_trigger > 0.1) {
+//                intake.setPower(INTAKE_OFF);
+//                armPosition = ARM_CLEAR_BARRIER;
+//            }
 
             else if (gamepad1Current.right_trigger > 0.1 && gamepad1Previous.right_trigger <= 0.1) {
                 if (Math.abs(intake.getPower() - INTAKE_COLLECT) < 0.1) {
@@ -382,7 +387,14 @@ public class StarterBotTeleOp extends LinearOpMode {
 
             else if (gamepad1Current.left_bumper){
                 /* This is the correct height to score the sample in the LOW BASKET */
-                armPosition = ARM_SCORE_SAMPLE_IN_LOW;
+                if (Math.abs(armPosition-ARM_SCORE_SAMPLE_IN_LOW) < 10) {
+                    armPosition = ARM_SCORE_SPECIMEN;
+                    wrist.setPosition(WRIST_FOLDED_OUT);
+                } else {
+                    armPosition = ARM_SCORE_SAMPLE_IN_LOW;
+                    wrist.setPosition(WRIST_FOLDED_IN);
+                }
+
             }
 
             else if (gamepad1Current.left_trigger > 0.1 && gamepad1Previous.left_trigger <= 0.1) {
@@ -431,7 +443,7 @@ public class StarterBotTeleOp extends LinearOpMode {
             We also set the target velocity (speed) the motor runs at, and use setMode to run it.*/
             armMotor.setTargetPosition((int) (armPosition  +armPositionFudgeFactor));
 
-            ((DcMotorEx) armMotor).setVelocity(2100);
+            ((DcMotorEx) armMotor).setVelocity(1750);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             /* TECH TIP: Encoders, integers, and doubles
