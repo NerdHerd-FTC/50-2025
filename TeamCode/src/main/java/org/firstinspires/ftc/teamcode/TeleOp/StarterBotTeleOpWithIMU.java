@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -71,9 +71,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
  */
 
 
-@TeleOp(name="Starter Bot TeleOp", group="Main")
+@TeleOp(name="Starter Bot TeleOp w/ IMU", group="Main")
 //@Disabled
-public class StarterBotTeleOp extends LinearOpMode {
+public class StarterBotTeleOpWithIMU extends LinearOpMode {
 
     /* Declare OpMode members. */
     DcMotor frontLeftMotor = null;
@@ -149,6 +149,9 @@ public class StarterBotTeleOp extends LinearOpMode {
     Gamepad gamepad2Previous = new Gamepad();
     Gamepad gamepad2Current = new Gamepad();
 
+    // Retrieve the IMU from the hardware map
+    IMU imu = null;
+
 
     @Override
     public void runOpMode() {
@@ -170,9 +173,6 @@ public class StarterBotTeleOp extends LinearOpMode {
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        leftEncoder = frontLeftMotor;
-        rightEncoder = frontRightMotor;
 
 
         /* Setting zeroPowerBehavior to BRAKE enables a "brake mode". This causes the motor to slow down
@@ -209,14 +209,14 @@ public class StarterBotTeleOp extends LinearOpMode {
         telemetry.addLine("Robot Ready.");
         telemetry.update();
 
-        // Retrieve the IMU from the hardware map
-//        IMU imu = hardwareMap.get(IMU.class, "imu");
-//        // Adjust the orientation parameters to match your robot
-//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-//                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-//                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-//        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-//        imu.initialize(parameters);
+        //Retrieve the IMU from the hardware map
+        imu = hardwareMap.get(IMU.class, "imu");
+        // Adjust the orientation parameters to match your robot
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+        imu.initialize(parameters);
 
 
         /* Wait for the game driver to press play */
@@ -258,17 +258,11 @@ public class StarterBotTeleOp extends LinearOpMode {
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
 
-            double botHeading = (leftEncoder.getCurrentPosition() + rightEncoder.getCurrentPosition()) * (1/2000.0) * 5.936868007 * (1/16.5);
+            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
 
             if (gamepad1Current.start || gamepad2Current.start) {
-                leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-                leftEncoder = frontLeftMotor;
-                rightEncoder = frontRightMotor;
+                imu.resetYaw();
             }
 
 
@@ -476,8 +470,6 @@ public class StarterBotTeleOp extends LinearOpMode {
             telemetry.addData("Heading: : ", botHeading);
             telemetry.addData("armTarget: ", armMotor.getTargetPosition());
             telemetry.addData("arm Encoder: ", armMotor.getCurrentPosition());
-            telemetry.addData("Left Encoder: ", leftEncoder.getCurrentPosition());
-            telemetry.addData("Right Encoder: ", rightEncoder.getCurrentPosition());
             telemetry.update();
 
         }
