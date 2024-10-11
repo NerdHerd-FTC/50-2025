@@ -22,6 +22,7 @@
 
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -67,7 +68,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
  * The intake wheels are powered by a goBILDA Speed Servo (2000-0025-0003) in Continuous Rotation mode.
  */
 
-
+@Disabled
 @TeleOp(name="Starter Bot TeleOp w/out IMU", group="Main")
 //@Disabled
 public class StarterBotTeleOpNoIMU extends LinearOpMode {

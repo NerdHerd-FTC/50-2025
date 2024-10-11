@@ -37,11 +37,11 @@ public class ServoTesting extends LinearOpMode {
             gamepad1Current.copy(gamepad1);
 
             if(gamepad1Current.right_bumper && !gamepad1Previous.right_bumper){
-                wristPosition += 0.05;
+                wristPosition += 0.01;
             }
 
             if (gamepad1Current.left_bumper && !gamepad1Previous.left_bumper) {
-                wristPosition -= 0.05;
+                wristPosition -= 0.01;
             }
 
             if (gamepad1.right_trigger > 0.1) {
