@@ -24,6 +24,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -133,8 +134,8 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0.66;
-    final double WRIST_FOLDED_OUT  = 0.34;
+    final double WRIST_FOLDED_IN   = 0.33;
+    final double WRIST_FOLDED_OUT  = 0.02;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
@@ -256,10 +257,23 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
 
-        if (gamepad1Current.start || gamepad2Current.start) {
+        if (gamepad1Current.start) {
             imu.resetYaw();
         }
 
+        if (gamepad2Current.start) {
+            armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            armPosition = 0;
+        }
+
+        if (gamepad2Current.left_bumper) {
+            armPosition -= 3 * ARM_TICKS_PER_DEGREE;
+        }
+
+        if (gamepad2Current.right_bumper) {
+            armPosition += 3 * ARM_TICKS_PER_DEGREE;
+        }
 
 
         // Rotate the movement direction counter to the bot's rotation
