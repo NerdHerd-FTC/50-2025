@@ -20,9 +20,11 @@
  *   SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -272,7 +274,6 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         if (gamepad2Current.right_bumper) {
             armPosition += 3 * ARM_TICKS_PER_DEGREE;
         }
-
 
 
         // Rotate the movement direction counter to the bot's rotation
