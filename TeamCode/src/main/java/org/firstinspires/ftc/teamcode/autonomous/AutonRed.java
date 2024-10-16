@@ -16,12 +16,12 @@ import org.firstinspires.ftc.teamcode.autonomous.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.autonomous.subsystems.Wrist;
 
 @Config
-@Autonomous(name="Meet 0 Auton Both", group="Autonomous")
+@Autonomous(name="Red", group="Autonomous")
 
 public class AutonRed extends LinearOpMode {
     @Override
     public void runOpMode() {
-        Pose2d startPose = new Pose2d(12, -63.5, 90);
+        Pose2d startPose = new Pose2d(12, -63.5, Math.toRadians(90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
 
