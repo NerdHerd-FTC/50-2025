@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -120,7 +120,7 @@ public class StarterBotTeleOpNoIMU extends LinearOpMode {
     final double ARM_COLLAPSED_INTO_ROBOT  = 0;
     final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
     final double ARM_CLEAR_BARRIER         = 230 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
+    final double ARM_SCORE_SPECIMEN        = 165 * ARM_TICKS_PER_DEGREE;
     final double ARM_SCORE_SAMPLE_IN_LOW   = 160 * ARM_TICKS_PER_DEGREE;
     final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
     final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
@@ -131,8 +131,8 @@ public class StarterBotTeleOpNoIMU extends LinearOpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0.66;
-    final double WRIST_FOLDED_OUT  = 0.34;
+    final double WRIST_FOLDED_IN   = 0.50;
+    final double WRIST_FOLDED_OUT  = 0.17;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;

@@ -11,13 +11,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Wrist {
     private Servo wrist;
-    final double WRIST_FOLDED_IN   = 0.33;
-    final double WRIST_FOLDED_OUT  = 0.02;
+    final double WRIST_FOLDED_IN   = 0.50;
+    final double WRIST_FOLDED_OUT  = 0.17;
 
     public Wrist(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");
 
-        wrist.setPosition(WRIST_FOLDED_IN);
+        //wrist.setPosition(WRIST_FOLDED_IN);
     }
 
     public class FoldOut implements Action {

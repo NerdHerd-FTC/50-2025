@@ -16,7 +16,7 @@ public class Arm {
     final double ARM_CLEAR_BARRIER         = 230 * ARM_TICKS_PER_DEGREE;
     final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
     final double ARM_HOOK_SPECIMEN         = 165 * ARM_TICKS_PER_DEGREE;
-    final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
+    final double ARM_WINCH_ROBOT           = 10  * ARM_TICKS_PER_DEGREE;
     final double ARM_TOUCH_BAR             = 150 * ARM_TICKS_PER_DEGREE;
 
     public Arm(HardwareMap hardwareMap) {

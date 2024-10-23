@@ -16,15 +16,14 @@ public class MeepMeepTesting {
                 .setDimensions(18, 17)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(12, -63.5, Math.toRadians(90)))
-                //intake off but powered
-                .strafeTo(new Vector2d(9, -39))
-                //arm is at specimen position
-                .strafeTo(new Vector2d(9, -33))
-                .strafeTo(new Vector2d(9, -43))
-                .setTangent(Math.toRadians(180))
-                //.strafeTo(new Vector2d(-34, -34))
-                .splineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(0)), Math.toRadians(90))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-12, -63.5, Math.toRadians(90)))
+                .strafeTo(new Vector2d(-5, -42))
+                .strafeTo(new Vector2d(-5, -46))
+                .strafeTo(new Vector2d(-5, -50))
+                .strafeTo(new Vector2d(-40, -50))
+                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(0))
+                .strafeTo(new Vector2d(-32, -12))
+
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -122,9 +122,9 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 
     final double ARM_COLLAPSED_INTO_ROBOT  = 0;
     final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
-    final double ARM_CLEAR_BARRIER         = 230 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SAMPLE_IN_LOW   = 160 * ARM_TICKS_PER_DEGREE;
+    final double ARM_CLEAR_BARRIER         = 235 * ARM_TICKS_PER_DEGREE;
+    final double ARM_SCORE_SPECIMEN        = 163 * ARM_TICKS_PER_DEGREE;
+    final double ARM_SCORE_SAMPLE_IN_LOW   = 165 * ARM_TICKS_PER_DEGREE;
     final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
     final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
 
@@ -134,8 +134,8 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0.33;
-    final double WRIST_FOLDED_OUT  = 0.02;
+    final double WRIST_FOLDED_IN   = 0.50;
+    final double WRIST_FOLDED_OUT  = 0.17;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
