@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.routines;
 
 
 import com.acmerobotics.dashboard.config.Config;
@@ -10,15 +10,17 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.autonomous.MecanumDrive;
 import org.firstinspires.ftc.teamcode.autonomous.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.autonomous.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.autonomous.subsystems.Wrist;
 
 @Config
-@Autonomous(name="Driver: Right, Park: Left, Specimen: Right", group="Autonomous")
+@Autonomous(name="Driver: Right, Park: Right, Specimen: Right", group="Autonomous")
 
 
-public class RightOfDriverLeftParkRightSpecimenAuton extends LinearOpMode {
+public class RightOfDriverRightParkRightSpecimenAuton extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -29,11 +31,6 @@ public class RightOfDriverLeftParkRightSpecimenAuton extends LinearOpMode {
         Arm arm = new Arm(hardwareMap);
         Wrist wrist = new Wrist(hardwareMap);
         Intake intake = new Intake(hardwareMap);
-
-//        Action approachSubmersible = drive.actionBuilder(startPose)
-//                .strafeTo(new Vector2d(9, -39))
-//                .build();
-//                //move arm to specimen hanging position
 
         Action moveToSubmersibleToScoreSubmersible = drive.actionBuilder(startPose)
                 .strafeTo(new Vector2d(5, -42))
@@ -50,9 +47,9 @@ public class RightOfDriverLeftParkRightSpecimenAuton extends LinearOpMode {
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(5, -50, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-40, -50))
-                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(0))
-                .strafeTo(new Vector2d(-32, -12))
+                .strafeTo(new Vector2d(40, -50))
+                .strafeToLinearHeading(new Vector2d(40, -12), Math.toRadians(180))
+                .strafeTo(new Vector2d(32, -12))
                 .build();
 
         SequentialAction auto = new SequentialAction(

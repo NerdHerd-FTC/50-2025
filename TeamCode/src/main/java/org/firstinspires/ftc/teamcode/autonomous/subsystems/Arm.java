@@ -14,10 +14,10 @@ public class Arm {
     final double ARM_COLLAPSED_INTO_ROBOT  = 0;
     final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
     final double ARM_CLEAR_BARRIER         = 230 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
-    final double ARM_HOOK_SPECIMEN         = 165 * ARM_TICKS_PER_DEGREE;
+    final double ARM_SCORE_SPECIMEN        = 167 * ARM_TICKS_PER_DEGREE;
+    final double ARM_HOOK_SPECIMEN         = 158 * ARM_TICKS_PER_DEGREE;
     final double ARM_WINCH_ROBOT           = 10  * ARM_TICKS_PER_DEGREE;
-    final double ARM_TOUCH_BAR             = 150 * ARM_TICKS_PER_DEGREE;
+    final double ARM_TOUCH_BAR             = 155 * ARM_TICKS_PER_DEGREE;
 
     public Arm(HardwareMap hardwareMap) {
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -32,11 +32,11 @@ public class Arm {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet) {
-            arm.setTargetPosition((int) ARM_SCORE_SPECIMEN);
+            arm.setTargetPosition((int) ARM_HOOK_SPECIMEN);
             arm.setVelocity(1750);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            if (Math.abs(arm.getCurrentPosition() - ARM_SCORE_SPECIMEN) < 10) {
+            if (Math.abs(arm.getCurrentPosition() - ARM_HOOK_SPECIMEN) < 10) {
                 return false;
             } else {
                 return true;
@@ -49,10 +49,10 @@ public class Arm {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet) {
-            arm.setTargetPosition((int) ARM_HOOK_SPECIMEN);
+            arm.setTargetPosition((int) ARM_SCORE_SPECIMEN);
             arm.setVelocity(1750);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (Math.abs(arm.getCurrentPosition() - ARM_HOOK_SPECIMEN) < 10) {
+            if (Math.abs(arm.getCurrentPosition() - ARM_SCORE_SPECIMEN) < 10) {
                 return false;
             } else {
                 return true;

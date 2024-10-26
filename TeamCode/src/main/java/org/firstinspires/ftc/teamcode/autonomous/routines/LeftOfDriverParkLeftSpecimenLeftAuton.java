@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.routines;
 
 
 import com.acmerobotics.dashboard.config.Config;
@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.autonomous.MecanumDrive;
 import org.firstinspires.ftc.teamcode.autonomous.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.autonomous.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.autonomous.subsystems.Wrist;
@@ -45,15 +46,16 @@ public class LeftOfDriverParkLeftSpecimenLeftAuton extends LinearOpMode {
 
         Action park = drive.actionBuilder(new Pose2d(5, -50, Math.toRadians(90)))
                 .strafeTo(new Vector2d(-40, -50))
-                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(0))
-                .strafeTo(new Vector2d(-32, -12))
+                .strafeToLinearHeading(new Vector2d(-40, -14), Math.toRadians(0))
+                .strafeTo(new Vector2d(-32, -14))
                 .build();
 
         SequentialAction auto = new SequentialAction(
                 new ParallelAction(
-                        arm.scoreSpecimen(),
+                        arm.liftToSpecimen(),
                         moveToSubmersibleToScoreSubmersible
                 ),
+                arm.scoreSpecimen(),
                 reverseAndScoreInSubmersibleSlight,
                 new ParallelAction(
                         reverseAndScoreInSubmersibleFull,

@@ -17,12 +17,14 @@ public class MeepMeepTesting {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-12, -63.5, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-5, -42))
-                .strafeTo(new Vector2d(-5, -46))
-                .strafeTo(new Vector2d(-5, -50))
-                .strafeTo(new Vector2d(-40, -50))
-                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(0))
-                .strafeTo(new Vector2d(-32, -12))
+
+                .strafeTo(new Vector2d(36, -36))
+
+                .strafeToLinearHeading(new Vector2d(36, -12), Math.toRadians(270))
+                .strafeTo(new Vector2d(45, -12))
+                .strafeTo(new Vector2d(45, -60))
+                .strafeTo(new Vector2d(50, -12))
+                .strafeTo(new Vector2d(50, -60))
 
                 .build());
 
