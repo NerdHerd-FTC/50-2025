@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.MecanumDrive;
-import org.firstinspires.ftc.teamcode.autonomous.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.autonomous.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.autonomous.subsystems.Wrist;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Config
 @Autonomous(name="Driver: Right, Park: Right, Specimen: Right", group="Autonomous")

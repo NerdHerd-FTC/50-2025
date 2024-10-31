@@ -37,6 +37,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 /*
  * This OpMode is an example driver-controlled (TeleOp) mode for the goBILDA 2024-2025 FTC
@@ -87,7 +89,8 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     CRServo intake      = null; //the active intake servo
     Servo   wrist       = null; //the wrist servo
     IMU     imu         = null; //the imu
-
+    Arm     arm         = null; //the arm subsystem
+    Wrist   wristSubsystem       = null; //the wrist subsystem
 
     /* This constant is the number of encoder ticks for each degree of rotation of the arm.
     To find this, we first need to consider the total gear reduction powering our arm.
@@ -106,27 +109,27 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     We divide that by 360 to get the counts per degree. Which is 7.46666666667.
 
     */
-    final double ARM_TICKS_PER_DEGREE = 19.7924893140647; //exact fraction is (194481/9826)
-
-
-    /* These constants hold the position that the arm is commanded to run to.
-    These are relative to where the arm was located when you start the OpMode. So make sure the
-    arm is reset to collapsed inside the robot before you start the program.
-
-    In these variables you'll see a number in degrees, multiplied by the ticks per degree of the arm.
-    This results in the number of encoder ticks the arm needs to move in order to achieve the ideal
-    set position of the arm. For example, the ARM_SCORE_SAMPLE_IN_LOW is set to
-    160 * ARM_TICKS_PER_DEGREE. This asks the arm to move 160° from the starting position.
-    If you'd like it to move further, increase that number. If you'd like it to not move
-    as far from the starting position, decrease it. */
-
-    final double ARM_COLLAPSED_INTO_ROBOT  = 0;
-    final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
-    final double ARM_CLEAR_BARRIER         = 235 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SAMPLE_IN_LOW   = 162 * ARM_TICKS_PER_DEGREE;
-    final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
-    final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
+//    final double ARM_TICKS_PER_DEGREE = 7.46666666667;  //19.7924893140647; //exact fraction is (194481/9826)
+//
+//
+//    /* These constants hold the position that the arm is commanded to run to.
+//    These are relative to where the arm was located when you start the OpMode. So make sure the
+//    arm is reset to collapsed inside the robot before you start the program.
+//
+//    In these variables you'll see a number in degrees, multiplied by the ticks per degree of the arm.
+//    This results in the number of encoder ticks the arm needs to move in order to achieve the ideal
+//    set position of the arm. For example, the ARM_SCORE_SAMPLE_IN_LOW is set to
+//    160 * ARM_TICKS_PER_DEGREE. This asks the arm to move 160° from the starting position.
+//    If you'd like it to move further, increase that number. If you'd like it to not move
+//    as far from the starting position, decrease it. */
+//
+//    final double ARM_COLLAPSED_INTO_ROBOT  = 0;
+//    final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
+//    final double ARM_CLEAR_BARRIER         = 235 * ARM_TICKS_PER_DEGREE;
+//    final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
+//    final double ARM_SCORE_SAMPLE_IN_LOW   = 162 * ARM_TICKS_PER_DEGREE;
+//    final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
+//    final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
 
     /* Variables to store the speed the intake servo should be set at to intake, and deposit game elements. */
     final double INTAKE_COLLECT    = -1.0;
@@ -134,14 +137,13 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0.50;
-    final double WRIST_FOLDED_OUT  = 0.17;
+//    final double WRIST_FOLDED_IN   = 0.50;
+//    final double WRIST_FOLDED_OUT  = 0.17;
 
-    /* A number in degrees that the triggers can adjust the arm position by */
-    final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
+
 
     /* Variables that are used to set the arm to a specific position */
-    double armPosition = (int) ARM_WINCH_ROBOT;
+    double armPosition = (int) arm.ARM_WINCH_ROBOT;
     double armPositionFudgeFactor;
 
     Gamepad gamepad1Previous = new Gamepad();
@@ -162,6 +164,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 
 
         armMotor = hardwareMap.get(DcMotor.class, "arm"); //the arm motor
+        arm = new Arm(hardwareMap);
 
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -200,7 +203,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 
         /* Make sure that the intake is off, and the wrist is folded in. */
         intake.setPower(INTAKE_OFF);
-        wrist.setPosition(WRIST_FOLDED_IN);
+        wrist.setPosition(wristSubsystem.WRIST_FOLDED_IN);
 
         /* Send telemetry message to signify robot waiting */
         telemetry.addLine("Robot Ready.");
@@ -218,7 +221,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 
     @Override
     public void start() {
-        wrist.setPosition(WRIST_FOLDED_OUT);
+        wrist.setPosition(wristSubsystem.WRIST_FOLDED_OUT);
         telemetry.addLine("Starting");
     }
 
@@ -268,11 +271,11 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         }
 
         if (gamepad2Current.left_bumper) {
-            armPosition -= 3 * ARM_TICKS_PER_DEGREE;
+            armPosition -= 3 * arm.ARM_TICKS_PER_DEGREE;
         }
 
         if (gamepad2Current.right_bumper) {
-            armPosition += 3 * ARM_TICKS_PER_DEGREE;
+            armPosition += 3 * arm.ARM_TICKS_PER_DEGREE;
         }
 
 
@@ -323,7 +326,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
             decreaseArmPositionFudgeFactor = gamepad2Current.left_trigger;
         }
 
-        armPositionFudgeFactor = FUDGE_FACTOR * (increaseArmPositionFudgeFactor + (-decreaseArmPositionFudgeFactor));
+        armPositionFudgeFactor = arm.FUDGE_FACTOR * (increaseArmPositionFudgeFactor + (-decreaseArmPositionFudgeFactor));
 
 
 
@@ -337,19 +340,19 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         //TODO: Fix Controls
         if (gamepad1Current.b && !gamepad1Previous.b){
             /* This is the correct height to score the SPECIMEN in the HIGH RUNG */
-            armPosition = ARM_SCORE_SPECIMEN;
-            wrist.setPosition(WRIST_FOLDED_IN);
+            armPosition = arm.ARM_SCORE_SPECIMEN;
+            wrist.setPosition(wristSubsystem.WRIST_FOLDED_IN);
         }
 
         if (gamepad1Current.right_bumper && !gamepad1Previous.right_bumper){
             /* This is the intaking/collecting arm position */
-            if (Math.abs(armPosition-ARM_CLEAR_BARRIER) <= 5)  {
-                armPosition = ARM_COLLECT;
+            if (Math.abs(armPosition-arm.ARM_CLEAR_BARRIER) <= 5)  {
+                armPosition = arm.ARM_COLLECT;
             } else {
-                armPosition = ARM_CLEAR_BARRIER;
+                armPosition = arm.ARM_CLEAR_BARRIER;
             }
 
-            wrist.setPosition(WRIST_FOLDED_OUT);
+            wrist.setPosition(wristSubsystem.WRIST_FOLDED_OUT);
             intake.setPower(INTAKE_COLLECT);
         }
 
@@ -365,8 +368,8 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         else if (gamepad1Current.left_bumper){
             /* This is the correct height to score the sample in the LOW BASKET */
 
-            armPosition = ARM_SCORE_SAMPLE_IN_LOW;
-            wrist.setPosition(WRIST_FOLDED_OUT);
+            armPosition = arm.ARM_SCORE_SAMPLE_IN_LOW;
+            wrist.setPosition(wristSubsystem.WRIST_FOLDED_OUT);
         }
 
         //TODO: Fix Arm Position
@@ -383,9 +386,9 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         else if (gamepad1Current.back) {
                 /* This turns off the intake, folds in the wrist, and moves the arm
                 back to folded inside the robot. This is also the starting configuration */
-            armPosition = ARM_COLLAPSED_INTO_ROBOT;
+            armPosition = arm.ARM_COLLAPSED_INTO_ROBOT;
             intake.setPower(INTAKE_OFF);
-            wrist.setPosition(WRIST_FOLDED_IN);
+            wrist.setPosition(wristSubsystem.WRIST_FOLDED_IN);
         }
 
 //        else if (gamepad1Current.dpad_right){
@@ -396,20 +399,20 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 
         else if (gamepad2Current.dpad_up){
             /* This sets the arm to vertical to hook onto the LOW RUNG for hanging */
-            armPosition = ARM_ATTACH_HANGING_HOOK;
+            armPosition = arm.ARM_ATTACH_HANGING_HOOK;
             intake.setPower(INTAKE_OFF);
-            wrist.setPosition(WRIST_FOLDED_IN);
+            wrist.setPosition(wristSubsystem.WRIST_FOLDED_IN);
         }
 
         else if (gamepad2Current.dpad_right) {
-            armPosition = ARM_ATTACH_HANGING_HOOK + (15 * FUDGE_FACTOR);
+            armPosition = arm.ARM_ATTACH_HANGING_HOOK + (15 * arm.FUDGE_FACTOR);
         }
 
         else if (gamepad2Current.dpad_down){
             /* this moves the arm down to lift the robot up once it has been hooked */
-            armPosition = ARM_WINCH_ROBOT;
+            armPosition = arm.ARM_WINCH_ROBOT;
             intake.setPower(INTAKE_OFF);
-            wrist.setPosition(WRIST_FOLDED_IN);
+            wrist.setPosition(wristSubsystem.WRIST_FOLDED_IN);
         }
 
         /* Here we set the target position of our arm to match the variable that was selected
