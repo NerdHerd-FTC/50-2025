@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Wrist {
     private Servo wrist;
-    public final double WRIST_FOLDED_IN   = 0.50;
-    public final double WRIST_FOLDED_OUT  = 0.17;
+    public final double WRIST_FOLDED_IN   = 0.74;
+    public final double WRIST_FOLDED_OUT  = 0.4;
 
     public Wrist(HardwareMap hardwareMap) {
         wrist = hardwareMap.get(Servo.class, "wrist");

@@ -19,10 +19,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Disabled
 @Config
-@Autonomous(name="Driver: Left, Park: Left, Specimen: Right", group="Autonomous")
+@Autonomous(name="Combo Left All", group="Autonomous")
 
 
-public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
+public class ComboLeftAll extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -35,29 +35,50 @@ public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
         Intake intake = new Intake(hardwareMap);
 
         Action moveToSubmersibleToScoreSubmersible = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(5, -42))
+                .strafeTo(new Vector2d(-5, -42))
                 .build();
 
         Action reverseAndScoreInSubmersibleSlight = drive.actionBuilder(new Pose2d(5, -42, 90))
-                .strafeTo(new Vector2d(5, -46))
+                .strafeTo(new Vector2d(-5, -48))
                 .build();
 
-        Action reverseAndScoreInSubmersibleFull = drive.actionBuilder(new Pose2d(5, -46, 90))
-                .strafeTo(new Vector2d(5, -50))
+        Action reverseAndScoreInSubmersibleFull = drive.actionBuilder(new Pose2d(5, -48, 90))
+                .strafeTo(new Vector2d(-5, -50))
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(5, -50, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-40, -50))
-                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(0))
-                .strafeTo(new Vector2d(-32, -12))
+                .strafeTo(new Vector2d(32, -36))
+
+                .strafeToLinearHeading(new Vector2d(32, -12), Math.toRadians(270))
+                .strafeTo(new Vector2d(45, -12))
+                .strafeTo(new Vector2d(45, -60))
+                .strafeTo(new Vector2d(50, -12))
+                .strafeTo(new Vector2d(53, -12))
+                .strafeTo(new Vector2d(53, -60))
+                .strafeTo(new Vector2d(58, -12))
+                .strafeTo(new Vector2d(61, -12))
+                .strafeTo(new Vector2d(61, -60))
+
+
+                .strafeTo(new Vector2d(-32, -36))
+
+                .strafeToLinearHeading(new Vector2d(-32, -12), Math.toRadians(270))
+                .strafeTo(new Vector2d(-45, -12))
+                .strafeTo(new Vector2d(-45, -60))
+                .strafeTo(new Vector2d(-50, -12))
+                .strafeTo(new Vector2d(-53, -12))
+                .strafeTo(new Vector2d(-53, -60))
+                .strafeTo(new Vector2d(-58, -12))
+                .strafeTo(new Vector2d(-61, -12))
+                .strafeTo(new Vector2d(-61, -60))
                 .build();
 
         SequentialAction auto = new SequentialAction(
-                moveToSubmersibleToScoreSubmersible,
                 new ParallelAction(
-                        wrist.foldIn(),
-                        arm.scoreSpecimen()
+                        arm.liftToSpecimen(),
+                        moveToSubmersibleToScoreSubmersible
                 ),
+                arm.scoreSpecimen(),
                 reverseAndScoreInSubmersibleSlight,
                 new ParallelAction(
                         reverseAndScoreInSubmersibleFull,
@@ -65,8 +86,7 @@ public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
 
                 ),
                 arm.clearGround(),
-                park,
-                arm.touchBottomBar()
+                park
         );
 
         Actions.runBlocking(arm.clearGround());
@@ -76,6 +96,7 @@ public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
+        Actions.runBlocking(wrist.foldIn());
         Actions.runBlocking(auto);
     }
 

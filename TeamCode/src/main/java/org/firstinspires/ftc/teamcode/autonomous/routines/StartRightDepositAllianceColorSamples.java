@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.MecanumDrive;
@@ -17,16 +16,15 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
-@Disabled
 @Config
-@Autonomous(name="Driver: Left, Park: Left, Specimen: Right", group="Autonomous")
+@Autonomous(name="Driver: RIGHT, Deposit Red/Blue in human player area", group="Autonomous")
 
 
-public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
+public class StartRightDepositAllianceColorSamples extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d startPose = new Pose2d(-12, -63.5, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(12, -63.5, Math.toRadians(90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
 
@@ -39,25 +37,39 @@ public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
                 .build();
 
         Action reverseAndScoreInSubmersibleSlight = drive.actionBuilder(new Pose2d(5, -42, 90))
-                .strafeTo(new Vector2d(5, -46))
+                .strafeTo(new Vector2d(5, -48))
                 .build();
 
-        Action reverseAndScoreInSubmersibleFull = drive.actionBuilder(new Pose2d(5, -46, 90))
+        Action reverseAndScoreInSubmersibleFull = drive.actionBuilder(new Pose2d(5, -48, 90))
                 .strafeTo(new Vector2d(5, -50))
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(5, -50, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-40, -50))
-                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(0))
-                .strafeTo(new Vector2d(-32, -12))
+                .strafeTo(new Vector2d(32, -36))
+
+                .strafeToLinearHeading(new Vector2d(32, -12), Math.toRadians(270))
+                .strafeTo(new Vector2d(45, -12))
+                .strafeTo(new Vector2d(45, -57))
+                .strafeTo(new Vector2d(50, -12))
+                .strafeTo(new Vector2d(53, -12))
+                .strafeTo(new Vector2d(53, -56))
+                .strafeTo(new Vector2d(58, -12))
+                .strafeTo(new Vector2d(61, -12))
+                .strafeTo(new Vector2d(61, -56))
+                .strafeTo(new Vector2d(61, -53))
+                .strafeTo(new Vector2d(57, -53))
+                .turnTo(Math.toRadians(90))
+                .strafeTo(new Vector2d(61, -55))
+
+
                 .build();
 
         SequentialAction auto = new SequentialAction(
-                moveToSubmersibleToScoreSubmersible,
                 new ParallelAction(
-                        wrist.foldIn(),
-                        arm.scoreSpecimen()
+                        arm.liftToSpecimen(),
+                        moveToSubmersibleToScoreSubmersible
                 ),
+                arm.scoreSpecimen(),
                 reverseAndScoreInSubmersibleSlight,
                 new ParallelAction(
                         reverseAndScoreInSubmersibleFull,
@@ -65,8 +77,7 @@ public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
 
                 ),
                 arm.clearGround(),
-                park,
-                arm.touchBottomBar()
+                park
         );
 
         Actions.runBlocking(arm.clearGround());
@@ -76,7 +87,9 @@ public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
+        Actions.runBlocking(wrist.foldIn());
         Actions.runBlocking(auto);
+        Actions.runBlocking(wrist.foldIn());
     }
 
 }

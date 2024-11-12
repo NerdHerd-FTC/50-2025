@@ -16,19 +16,37 @@ public class MeepMeepTesting {
                 .setDimensions(18, 17)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-12, -63.5, Math.toRadians(90)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(12, -63.5, Math.toRadians(90)))
+                .strafeTo(new Vector2d(-5, -42))
+                .strafeTo(new Vector2d(-5, -48))
+                .strafeTo(new Vector2d(-5, -50))
+                .strafeTo(new Vector2d(-32, -36))
 
-                .strafeTo(new Vector2d(32, -36))
+                .strafeToLinearHeading(new Vector2d(-32, -12), Math.toRadians(270))
+                .strafeTo(new Vector2d(-45, -12))
+                .strafeTo(new Vector2d(-47, -57))
+                .strafeTo(new Vector2d(-50, -12))
+                .strafeTo(new Vector2d(-53, -12))
+                .strafeTo(new Vector2d(-53, -56))
+                .strafeTo(new Vector2d(-58, -12))
+                .strafeTo(new Vector2d(-61, -12))
+                .strafeTo(new Vector2d(-61, -56))
+                .strafeTo(new Vector2d(-61, -53))
+                .strafeTo(new Vector2d(-57, -53))
+                .turnTo(Math.toRadians(90))
 
-                .strafeToLinearHeading(new Vector2d(32, -12), Math.toRadians(270))
-                .strafeTo(new Vector2d(45, -12))
-                .strafeTo(new Vector2d(45, -60))
-                .strafeTo(new Vector2d(50, -12))
-                        .strafeTo(new Vector2d(53, -12))
-                .strafeTo(new Vector2d(53, -60))
-                .strafeTo(new Vector2d(58, -12))
-                        .strafeTo(new Vector2d(61, -12))
-                        .strafeTo(new Vector2d(61, -60))
+
+//                .strafeTo(new Vector2d(-32, -36))
+//
+//                .strafeToLinearHeading(new Vector2d(-32, -12), Math.toRadians(270))
+//                .strafeTo(new Vector2d(-45, -12))
+//                .strafeTo(new Vector2d(-45, -60))
+//                .strafeTo(new Vector2d(-50, -12))
+//                .strafeTo(new Vector2d(-53, -12))
+//                .strafeTo(new Vector2d(-53, -60))
+//                .strafeTo(new Vector2d(-58, -12))
+//                .strafeTo(new Vector2d(-61, -12))
+//                .strafeTo(new Vector2d(-61, -60))
 
                 .build());
 
