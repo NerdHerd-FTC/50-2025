@@ -33,15 +33,15 @@ public class StartRightDepositAllianceColorSamples extends LinearOpMode {
         Intake intake = new Intake(hardwareMap);
 
         Action moveToSubmersibleToScoreSubmersible = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(5, -42))
+                .strafeTo(new Vector2d(8.5, -42))
                 .build();
 
         Action reverseAndScoreInSubmersibleSlight = drive.actionBuilder(new Pose2d(5, -42, 90))
-                .strafeTo(new Vector2d(5, -48))
+                .strafeTo(new Vector2d(9.5, -48))
                 .build();
 
         Action reverseAndScoreInSubmersibleFull = drive.actionBuilder(new Pose2d(5, -48, 90))
-                .strafeTo(new Vector2d(5, -50))
+                .strafeTo(new Vector2d(10.5, -50))
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(5, -50, Math.toRadians(90)))
@@ -54,9 +54,9 @@ public class StartRightDepositAllianceColorSamples extends LinearOpMode {
                 .strafeTo(new Vector2d(53, -12))
                 .strafeTo(new Vector2d(53, -56))
                 .strafeTo(new Vector2d(58, -12))
-                .strafeTo(new Vector2d(61, -12))
-                .strafeTo(new Vector2d(61, -56))
-                .strafeTo(new Vector2d(61, -53))
+                .strafeTo(new Vector2d(61.5, -12))
+                .strafeTo(new Vector2d(61.5, -56))
+                .strafeTo(new Vector2d(61.5, -53))
                 .strafeTo(new Vector2d(57, -53))
                 .turnTo(Math.toRadians(90))
                 .strafeTo(new Vector2d(61, -55))

@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Disabled
 @Config
-@Autonomous(name="Combo Left All", group="Autonomous")
+@Autonomous(name="Combo Left All 2", group="Autonomous")
 
 
 public class ComboLeftAll extends LinearOpMode {
@@ -47,30 +47,20 @@ public class ComboLeftAll extends LinearOpMode {
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(5, -50, Math.toRadians(90)))
-                .strafeTo(new Vector2d(32, -36))
+                .strafeTo(new Vector2d(-40, -50))
 
-                .strafeToLinearHeading(new Vector2d(32, -12), Math.toRadians(270))
-                .strafeTo(new Vector2d(45, -12))
-                .strafeTo(new Vector2d(45, -60))
-                .strafeTo(new Vector2d(50, -12))
-                .strafeTo(new Vector2d(53, -12))
-                .strafeTo(new Vector2d(53, -60))
-                .strafeTo(new Vector2d(58, -12))
-                .strafeTo(new Vector2d(61, -12))
-                .strafeTo(new Vector2d(61, -60))
-
-
-                .strafeTo(new Vector2d(-32, -36))
-
-                .strafeToLinearHeading(new Vector2d(-32, -12), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(270+(1e-6)))
                 .strafeTo(new Vector2d(-45, -12))
-                .strafeTo(new Vector2d(-45, -60))
+                .strafeTo(new Vector2d(-47, -57))
                 .strafeTo(new Vector2d(-50, -12))
                 .strafeTo(new Vector2d(-53, -12))
-                .strafeTo(new Vector2d(-53, -60))
+                .strafeTo(new Vector2d(-53, -56))
                 .strafeTo(new Vector2d(-58, -12))
-                .strafeTo(new Vector2d(-61, -12))
-                .strafeTo(new Vector2d(-61, -60))
+                .strafeTo(new Vector2d(-60, -12))
+                .strafeTo(new Vector2d(-60, -56))
+                .strafeTo(new Vector2d(-60, -53))
+                .strafeTo(new Vector2d(-60, -53))
+                .turnTo(Math.toRadians(90))
                 .build();
 
         SequentialAction auto = new SequentialAction(

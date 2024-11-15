@@ -125,7 +125,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     final double ARM_COLLAPSED_INTO_ROBOT  = 0;
     final double ARM_COLLECT               = 247 * ARM_TICKS_PER_DEGREE;
     final double ARM_CLEAR_BARRIER         = 225 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
+    final double ARM_SCORE_SPECIMEN        = 154 * ARM_TICKS_PER_DEGREE;
     final double ARM_SCORE_SAMPLE_IN_LOW   = 162 * ARM_TICKS_PER_DEGREE;
     final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
     final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
