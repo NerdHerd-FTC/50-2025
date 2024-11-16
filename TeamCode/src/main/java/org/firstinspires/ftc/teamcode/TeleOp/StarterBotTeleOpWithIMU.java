@@ -126,7 +126,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     final double ARM_COLLECT               = 247 * ARM_TICKS_PER_DEGREE;
     final double ARM_CLEAR_BARRIER         = 225 * ARM_TICKS_PER_DEGREE;
     final double ARM_SCORE_SPECIMEN        = 154 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SAMPLE_IN_LOW   = 162 * ARM_TICKS_PER_DEGREE;
+    final double ARM_SCORE_SAMPLE_IN_LOW   = 160 * ARM_TICKS_PER_DEGREE;
     final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
     final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
 
@@ -153,6 +153,8 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 
     Gamepad gamepad2Previous = new Gamepad();
     Gamepad gamepad2Current = new Gamepad();
+
+    final double DRIVE_SPEED = 0.75;
 
 
     @Override
@@ -257,6 +259,20 @@ public class StarterBotTeleOpWithIMU extends OpMode {
             rx = gamepad1Current.right_stick_x;
         }
 
+        final double rotationFudge = 0.2;
+
+        if (gamepad1Current.dpad_right || gamepad2Current.dpad_right) {
+            if (rx <= 1 - rotationFudge) {
+                rx += rotationFudge;
+            }
+        }
+
+        if (gamepad1Current.dpad_left || gamepad2Current.dpad_left) {
+            if (rx >= -1 + rotationFudge) {
+                rx -= rotationFudge;
+            }
+        }
+
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
 
@@ -270,13 +286,13 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 //            armPosition = 0;
 //        }
 
-        if (gamepad2Current.left_bumper) {
-            armPosition -= 3 * ARM_TICKS_PER_DEGREE;
-        }
-
-        if (gamepad2Current.right_bumper) {
-            armPosition += 3 * ARM_TICKS_PER_DEGREE;
-        }
+//        if (gamepad2Current.left_bumper) {
+//            armPosition -= 3 * ARM_TICKS_PER_DEGREE;
+//        }
+//
+//        if (gamepad2Current.right_bumper) {
+//            armPosition += 3 * ARM_TICKS_PER_DEGREE;
+//        }
 
 
         // Rotate the movement direction counter to the bot's rotation
@@ -294,10 +310,10 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
 
-        frontLeftMotor.setPower(frontLeftPower);
-        backLeftMotor.setPower(backLeftPower);
-        frontRightMotor.setPower(frontRightPower);
-        backRightMotor.setPower(backRightPower);
+        frontLeftMotor.setPower(frontLeftPower * DRIVE_SPEED);
+        backLeftMotor.setPower(backLeftPower * DRIVE_SPEED);
+        frontRightMotor.setPower(frontRightPower * DRIVE_SPEED);
+        backRightMotor.setPower(backRightPower * DRIVE_SPEED);
 
         /* Here we create a "fudge factor" for the arm position.
         This allows you to adjust (or "fudge") the arm position slightly with the gamepad triggers.
@@ -344,7 +360,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
             wrist.setPosition(WRIST_FOLDED_IN);
         }
 
-        if (gamepad1Current.right_bumper && !gamepad1Previous.right_bumper){
+        if ((gamepad1Current.right_bumper && !gamepad1Previous.right_bumper) || (gamepad2Current.right_bumper && !gamepad2Previous.right_bumper)){
             /* This is the intaking/collecting arm position */
             if (Math.abs(armPosition-ARM_CLEAR_BARRIER) <= 5)  {
                 armPosition = ARM_COLLECT;
@@ -365,7 +381,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 
         }
 
-        else if (gamepad1Current.left_bumper){
+        else if (gamepad1Current.left_bumper || gamepad2Current.left_bumper){
             /* This is the correct height to score the sample in the LOW BASKET */
 
             armPosition = ARM_SCORE_SAMPLE_IN_LOW;
@@ -397,22 +413,22 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 //            wrist.setPosition(WRIST_FOLDED_IN);
 //        }
 
-        else if (gamepad2Current.dpad_up){
+        if (gamepad2Current.dpad_up){
             /* This sets the arm to vertical to hook onto the LOW RUNG for hanging */
             armPosition = ARM_ATTACH_HANGING_HOOK;
             intake.setPower(INTAKE_OFF);
             wrist.setPosition(WRIST_FOLDED_IN);
         }
 
-        else if (gamepad2Current.dpad_right) {
-            armPosition = ARM_ATTACH_HANGING_HOOK + (15 * FUDGE_FACTOR);
-        }
-
-        else if (gamepad2Current.dpad_down){
+        if (gamepad2Current.dpad_down){
             /* this moves the arm down to lift the robot up once it has been hooked */
             armPosition = ARM_WINCH_ROBOT;
             intake.setPower(INTAKE_OFF);
             wrist.setPosition(WRIST_FOLDED_IN);
+        }
+
+        if (gamepad2Current.b) {
+            armPosition = ARM_ATTACH_HANGING_HOOK + (20 * ARM_TICKS_PER_DEGREE);
         }
 
         /* Here we set the target position of our arm to match the variable that was selected
