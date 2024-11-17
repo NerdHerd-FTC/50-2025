@@ -420,6 +420,10 @@ public class StarterBotTeleOpWithIMU extends OpMode {
             wrist.setPosition(WRIST_FOLDED_IN);
         }
 
+        if (gamepad2Current.b) {
+            armPosition = ARM_ATTACH_HANGING_HOOK + (20 * ARM_TICKS_PER_DEGREE);
+        }
+
         if (gamepad2Current.dpad_down){
             /* this moves the arm down to lift the robot up once it has been hooked */
             armPosition = ARM_WINCH_ROBOT;
@@ -427,9 +431,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
             wrist.setPosition(WRIST_FOLDED_IN);
         }
 
-        if (gamepad2Current.b) {
-            armPosition = ARM_ATTACH_HANGING_HOOK + (20 * ARM_TICKS_PER_DEGREE);
-        }
+
 
         /* Here we set the target position of our arm to match the variable that was selected
         by the driver.
