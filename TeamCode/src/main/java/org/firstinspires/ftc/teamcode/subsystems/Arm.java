@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import androidx.annotation.NonNull;
 
@@ -10,14 +10,21 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Arm {
     private DcMotorEx arm;
-    final double ARM_TICKS_PER_DEGREE = 19.7924893140647;
-    final double ARM_COLLAPSED_INTO_ROBOT  = 0;
-    final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
-    final double ARM_CLEAR_BARRIER         = 230 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
-    final double ARM_HOOK_SPECIMEN         = 165 * ARM_TICKS_PER_DEGREE;
-    final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
-    final double ARM_TOUCH_BAR             = 150 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_TICKS_PER_DEGREE =   19.7924893140647;//; 7.46666666667//exact fraction is (194481/9826)
+    public final double ARM_COLLAPSED_INTO_ROBOT  = 0;
+    public final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_CLEAR_BARRIER         = 230 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SCORE_SPECIMEN        = 167 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_HOOK_SPECIMEN         = 158 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SCORE_SAMPLE_IN_LOW   = 162 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_WINCH_ROBOT           = 10  * ARM_TICKS_PER_DEGREE;
+    public final double ARM_TOUCH_BAR             = 155 * ARM_TICKS_PER_DEGREE;
+
+    public final int VELOCITY = 1750; //450
+
+    /* A number in degrees that the triggers can adjust the arm position by */
+    public final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
 
     public Arm(HardwareMap hardwareMap) {
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -32,11 +39,11 @@ public class Arm {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet) {
-            arm.setTargetPosition((int) ARM_SCORE_SPECIMEN);
-            arm.setVelocity(1750);
+            arm.setTargetPosition((int) ARM_HOOK_SPECIMEN);
+            arm.setVelocity(VELOCITY);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            if (Math.abs(arm.getCurrentPosition() - ARM_SCORE_SPECIMEN) < 10) {
+            if (Math.abs(arm.getCurrentPosition() - ARM_HOOK_SPECIMEN) < 10) {
                 return false;
             } else {
                 return true;
@@ -49,10 +56,10 @@ public class Arm {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet) {
-            arm.setTargetPosition((int) ARM_HOOK_SPECIMEN);
-            arm.setVelocity(1750);
+            arm.setTargetPosition((int) ARM_SCORE_SPECIMEN);
+            arm.setVelocity(VELOCITY);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (Math.abs(arm.getCurrentPosition() - ARM_HOOK_SPECIMEN) < 10) {
+            if (Math.abs(arm.getCurrentPosition() - ARM_SCORE_SPECIMEN) < 10) {
                 return false;
             } else {
                 return true;
@@ -66,7 +73,7 @@ public class Arm {
 
         public boolean run(@NonNull TelemetryPacket packet) {
             arm.setTargetPosition((int) ARM_WINCH_ROBOT);
-            arm.setVelocity(1750);
+            arm.setVelocity(VELOCITY);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if (Math.abs(arm.getCurrentPosition() - ARM_WINCH_ROBOT) < 10) {
                 return false;
@@ -82,7 +89,7 @@ public class Arm {
 
         public boolean run(@NonNull TelemetryPacket packet) {
             arm.setTargetPosition((int) ARM_TOUCH_BAR);
-            arm.setVelocity(1750);
+            arm.setVelocity(VELOCITY);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if (Math.abs(arm.getCurrentPosition() - ARM_TOUCH_BAR) < 10) {
                 return false;
