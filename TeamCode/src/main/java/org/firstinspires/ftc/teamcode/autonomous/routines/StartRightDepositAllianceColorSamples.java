@@ -66,18 +66,20 @@ public class StartRightDepositAllianceColorSamples extends LinearOpMode {
 
         SequentialAction auto = new SequentialAction(
                 new ParallelAction(
-                        arm.liftToSpecimen(),
+                        //arm.liftToSpecimen(),
+                        arm.scoreSpecimen(),
                         moveToSubmersibleToScoreSubmersible
                 ),
-                arm.scoreSpecimen(),
+                //arm.scoreSpecimen(),
                 reverseAndScoreInSubmersibleSlight,
                 new ParallelAction(
                         reverseAndScoreInSubmersibleFull,
                         intake.deposit()
-
                 ),
-                arm.clearGround(),
-                park
+                new ParallelAction(
+                        arm.clearGround(),
+                        park
+                )
         );
 
         Actions.runBlocking(arm.clearGround());

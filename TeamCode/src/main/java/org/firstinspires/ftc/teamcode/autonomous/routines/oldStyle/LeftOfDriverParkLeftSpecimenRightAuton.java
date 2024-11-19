@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.routines;
+package org.firstinspires.ftc.teamcode.autonomous.routines.oldStyle;
 
 
 import com.acmerobotics.dashboard.config.Config;
@@ -19,10 +19,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Disabled
 @Config
-@Autonomous(name="Driver: Left, Park: Left, Specimen: Left", group="Autonomous")
+@Autonomous(name="Driver: Left, Park: Left, Specimen: Right", group="Autonomous")
 
 
-public class LeftOfDriverParkLeftSpecimenLeftAuton extends LinearOpMode {
+public class LeftOfDriverParkLeftSpecimenRightAuton extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -35,29 +35,29 @@ public class LeftOfDriverParkLeftSpecimenLeftAuton extends LinearOpMode {
         Intake intake = new Intake(hardwareMap);
 
         Action moveToSubmersibleToScoreSubmersible = drive.actionBuilder(startPose)
-                .strafeTo(new Vector2d(-5, -42))
+                .strafeTo(new Vector2d(5, -42))
                 .build();
 
         Action reverseAndScoreInSubmersibleSlight = drive.actionBuilder(new Pose2d(5, -42, 90))
-                .strafeTo(new Vector2d(-5, -48))
+                .strafeTo(new Vector2d(5, -46))
                 .build();
 
-        Action reverseAndScoreInSubmersibleFull = drive.actionBuilder(new Pose2d(5, -48, 90))
-                .strafeTo(new Vector2d(-5, -50))
+        Action reverseAndScoreInSubmersibleFull = drive.actionBuilder(new Pose2d(5, -46, 90))
+                .strafeTo(new Vector2d(5, -50))
                 .build();
 
         Action park = drive.actionBuilder(new Pose2d(5, -50, Math.toRadians(90)))
                 .strafeTo(new Vector2d(-40, -50))
-                .strafeToLinearHeading(new Vector2d(-40, -14), Math.toRadians(0))
-                .strafeTo(new Vector2d(-32, -14))
+                .strafeToLinearHeading(new Vector2d(-40, -12), Math.toRadians(0))
+                .strafeTo(new Vector2d(-32, -12))
                 .build();
 
         SequentialAction auto = new SequentialAction(
+                moveToSubmersibleToScoreSubmersible,
                 new ParallelAction(
-                        arm.liftToSpecimen(),
-                        moveToSubmersibleToScoreSubmersible
+                        wrist.foldIn(),
+                        arm.scoreSpecimen()
                 ),
-                arm.scoreSpecimen(),
                 reverseAndScoreInSubmersibleSlight,
                 new ParallelAction(
                         reverseAndScoreInSubmersibleFull,
@@ -76,7 +76,6 @@ public class LeftOfDriverParkLeftSpecimenLeftAuton extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
-        Actions.runBlocking(wrist.foldIn());
         Actions.runBlocking(auto);
     }
 

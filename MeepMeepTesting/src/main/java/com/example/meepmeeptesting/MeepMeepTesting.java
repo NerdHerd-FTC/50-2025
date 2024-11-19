@@ -17,44 +17,17 @@ public class MeepMeepTesting {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(12, -63.5, Math.toRadians(90)))
-                .strafeTo(new Vector2d(7, -42))
-                .strafeTo(new Vector2d(7, -48))
-                .strafeTo(new Vector2d(7, -50))
-                .strafeTo(new Vector2d(32, -36))
-
-                .strafeToLinearHeading(new Vector2d(32, -12), Math.toRadians(270))
-                .strafeTo(new Vector2d(45, -12))
-                .strafeTo(new Vector2d(45, -57))
-                .strafeTo(new Vector2d(50, -12))
-                .strafeTo(new Vector2d(53, -12))
-                .strafeTo(new Vector2d(53, -56))
-                .strafeTo(new Vector2d(58, -12))
-                .strafeTo(new Vector2d(61.5, -12))
-                .strafeTo(new Vector2d(61.5, -56))
-                .strafeTo(new Vector2d(61.5, -53))
-                .strafeTo(new Vector2d(57, -53))
-                .turnTo(Math.toRadians(90))
-                .strafeTo(new Vector2d(61, -55))
-
-
-//                .strafeTo(new Vector2d(-32, -36))
-//
-//                .strafeToLinearHeading(new Vector2d(-32, -12), Math.toRadians(270))
-//                .strafeTo(new Vector2d(-45, -12))
-//                .strafeTo(new Vector2d(-45, -60))
-//                .strafeTo(new Vector2d(-50, -12))
-//                .strafeTo(new Vector2d(-53, -12))
-//                .strafeTo(new Vector2d(-53, -60))
-//                .strafeTo(new Vector2d(-58, -12))
-//                .strafeTo(new Vector2d(-61, -12))
-//                .strafeTo(new Vector2d(-61, -60))
-
+                .strafeToLinearHeading(new Vector2d(28, -44), Math.toRadians(-45))
+                .strafeTo(new Vector2d(32, -48))
+                .strafeToLinearHeading(new Vector2d(8.5, -42), Math.toRadians(90))
+                .strafeTo(new Vector2d(9.5, -48))
+                .strafeTo(new Vector2d(10.5, -50))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
+                //.addEntity(myBot)
                 .start();
     }
 }

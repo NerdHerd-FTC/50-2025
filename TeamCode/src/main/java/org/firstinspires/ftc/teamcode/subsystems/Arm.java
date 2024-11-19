@@ -21,7 +21,7 @@ public class Arm {
     public final double ARM_WINCH_ROBOT           = 10  * ARM_TICKS_PER_DEGREE;
     public final double ARM_TOUCH_BAR             = 155 * ARM_TICKS_PER_DEGREE;
 
-    public final int VELOCITY = 1750; //450
+    public final int VELOCITY = 2500; //450
 
     /* A number in degrees that the triggers can adjust the arm position by */
     public final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
@@ -99,6 +99,22 @@ public class Arm {
         }
     }
 
+    public class IntakeFromFloor implements Action {
+        @Override
+
+        public boolean run(@NonNull TelemetryPacket packet) {
+            arm.setTargetPosition((int) ARM_COLLECT);
+            arm.setVelocity(VELOCITY);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            if (Math.abs(arm.getCurrentPosition() - ARM_COLLECT) < 10) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     public Action liftToSpecimen() {
         return new LiftToSpecimen();
     }
@@ -109,4 +125,5 @@ public class Arm {
         return new ClearGround();
     }
     public Action touchBottomBar() { return  new TouchBottomBar(); }
+    public Action intakeFromFloor() { return  new IntakeFromFloor(); }
 }
