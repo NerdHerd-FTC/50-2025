@@ -32,7 +32,7 @@ public class StartRightDepositAllianceColorSamples extends LinearOpMode {
         Wrist wrist = new Wrist(hardwareMap);
         Intake intake = new Intake(hardwareMap);
 
-        Action moveToSubmersibleToScoreSubmersible = drive.actionBuilder(startPose)
+        Action moveToSubmersibleToScoreSpecimen = drive.actionBuilder(startPose)
                 .strafeTo(new Vector2d(8.5, -42))
                 .build();
 
@@ -68,7 +68,7 @@ public class StartRightDepositAllianceColorSamples extends LinearOpMode {
                 new ParallelAction(
                         //arm.liftToSpecimen(),
                         arm.scoreSpecimen(),
-                        moveToSubmersibleToScoreSubmersible
+                        moveToSubmersibleToScoreSpecimen
                 ),
                 //arm.scoreSpecimen(),
                 reverseAndScoreInSubmersibleSlight,
