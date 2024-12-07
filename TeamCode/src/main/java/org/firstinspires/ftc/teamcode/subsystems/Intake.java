@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
     private CRServo intake;
-    final double INTAKE_COLLECT    = -1.0;
+    final double INTAKE_COLLECT    = -0.5;
     final double INTAKE_OFF        =  0.0;
     final double INTAKE_DEPOSIT    =  0.5;
 

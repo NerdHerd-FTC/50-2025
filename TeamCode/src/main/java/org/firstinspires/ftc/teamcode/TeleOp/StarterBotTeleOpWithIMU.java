@@ -75,7 +75,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Wrist;
  */
 
 
-@TeleOp(name="Meet 1 TeleOp", group="Main")
+@TeleOp(name="Meet 2 TeleOp", group="Main")
 //@Disabled
 public class StarterBotTeleOpWithIMU extends OpMode {
 
@@ -121,23 +121,25 @@ public class StarterBotTeleOpWithIMU extends OpMode {
 //    160 * ARM_TICKS_PER_DEGREE. This asks the arm to move 160° from the starting position.
 //    If you'd like it to move further, increase that number. If you'd like it to not move
 //    as far from the starting position, decrease it. */
+
+    final double ARM_POS_OFFSET            = 2;
 //
     final double ARM_COLLAPSED_INTO_ROBOT  = 0;
-    final double ARM_COLLECT               = 247 * ARM_TICKS_PER_DEGREE;
-    final double ARM_CLEAR_BARRIER         = 225 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SPECIMEN        = 154 * ARM_TICKS_PER_DEGREE;
-    final double ARM_SCORE_SAMPLE_IN_LOW   = 160 * ARM_TICKS_PER_DEGREE;
-    final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
-    final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
+    final double ARM_COLLECT               = (250 * ARM_TICKS_PER_DEGREE) + ARM_POS_OFFSET;
+    final double ARM_CLEAR_BARRIER         = (225 * ARM_TICKS_PER_DEGREE) + ARM_POS_OFFSET;
+    final double ARM_SCORE_SPECIMEN        = (154 * ARM_TICKS_PER_DEGREE) + ARM_POS_OFFSET;
+    final double ARM_SCORE_SAMPLE_IN_LOW   = (160 * ARM_TICKS_PER_DEGREE) + ARM_POS_OFFSET;
+    final double ARM_ATTACH_HANGING_HOOK   = (120 * ARM_TICKS_PER_DEGREE) + ARM_POS_OFFSET;
+    final double ARM_WINCH_ROBOT           = (15  * ARM_TICKS_PER_DEGREE) + ARM_POS_OFFSET;
 
     /* Variables to store the speed the intake servo should be set at to intake, and deposit game elements. */
-    final double INTAKE_COLLECT    = -1.0;
+    final double INTAKE_COLLECT    = -0.5;
     final double INTAKE_OFF        =  0.0;
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0.74;
-    final double WRIST_FOLDED_OUT  = 0.4;
+    final double WRIST_FOLDED_IN   = 0.67;
+    final double WRIST_FOLDED_OUT  = 0.34;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;

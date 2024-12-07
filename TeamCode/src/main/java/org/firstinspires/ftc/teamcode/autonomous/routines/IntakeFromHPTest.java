@@ -23,6 +23,10 @@ import org.opencv.core.Mat;
 
 public class IntakeFromHPTest extends LinearOpMode {
 
+//    public Action HPIntake(double offset, ) {
+//
+//    }
+
     @Override
     public void runOpMode() {
         Pose2d startPose = new Pose2d(12, -63.5, Math.toRadians(90));
@@ -38,14 +42,10 @@ public class IntakeFromHPTest extends LinearOpMode {
                 .build();
 
         Action IntakeFromHP = drive.actionBuilder(new Pose2d(28, -44, Math.toRadians(-45)))
-                .strafeTo(new Vector2d(32, -48))
-                .waitSeconds(2)
-
-
-
+                .strafeTo(new Vector2d(34, -50))
                 .build();
 
-        Action moveToSubmersibleToScoreSubmersible = drive.actionBuilder(new Pose2d(32, -48, Math.toRadians(-45)))
+        Action moveToSubmersibleToScoreSubmersible = drive.actionBuilder(new Pose2d(34, -50, Math.toRadians(-45)))
                 .strafeToLinearHeading(new Vector2d(8.5, -42), Math.toRadians(90))
                 .build();
 
@@ -65,7 +65,7 @@ public class IntakeFromHPTest extends LinearOpMode {
         if (isStopRequested()) return;
         Actions.runBlocking(ApproachHPStation);
         Actions.runBlocking(wrist.foldOut());
-        Actions.runBlocking(new SequentialAction(
+        Actions.runBlocking(new ParallelAction(
                 intake.collect(),
                 arm.intakeFromFloor()
         ));
