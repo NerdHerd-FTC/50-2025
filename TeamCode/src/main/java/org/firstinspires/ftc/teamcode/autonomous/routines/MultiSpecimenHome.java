@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TrajectoryActionFactory;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -18,9 +17,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Config
-@Autonomous(name = "Multi Specimen")
+@Autonomous(name = "Multi Specimen Home")
 
-public class MultiSpecimen extends LinearOpMode {
+public class MultiSpecimenHome extends LinearOpMode {
     public Action generatePreloadAuto(MecanumDrive drive, Arm arm, Wrist wrist, Intake intake, Pose2d startPose) {
         TrajectoryActionBuilder moveToSubmersibleForPreload = drive.actionBuilder(startPose)
                 .strafeTo(new Vector2d(8.5, -42))
@@ -97,8 +96,8 @@ public class MultiSpecimen extends LinearOpMode {
                 ApproachHPStation.build(),
                 wrist.foldOut(),
                 new ParallelAction(
-                    intake.collect(),
-                    arm.intakeFromFloor()
+                        intake.collect(),
+                        arm.intakeFromFloor()
                 ),
                 IntakeFromHP.build(),
                 new ParallelAction(
@@ -130,7 +129,14 @@ public class MultiSpecimen extends LinearOpMode {
         Intake intake = new Intake(hardwareMap);
 
         Action preloadAuto = generatePreloadAuto(drive, arm, wrist, intake, startPose);
-        Action secondSpecimenAuto = generateAfterSpecimenAuto(2, drive, arm, wrist, intake, new Pose2d(61.5, -56, Math.toRadians(270)));
+        Action secondSpecimenAuto = generateAfterSpecimenAuto(2, drive, arm, wrist, intake, new Pose2d(12, -56, Math.toRadians(90)));
+
+        TrajectoryActionBuilder home = drive.actionBuilder(new Pose2d(61.5, -56, Math.toRadians(270)))
+                        .strafeToLinearHeading(new Vector2d(12, -56), Math.toRadians(90))
+                                .endTrajectory();
+        TrajectoryActionBuilder park = drive.actionBuilder(new Pose2d(8.5 , -50, Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(61, -55), Math.toRadians(90))
+                        .endTrajectory();
 
         Actions.runBlocking(arm.clearGround());
 
@@ -143,7 +149,11 @@ public class MultiSpecimen extends LinearOpMode {
         Actions.runBlocking(
                 new SequentialAction(
                         preloadAuto,
-                        secondSpecimenAuto
+                        home.build(),
+                        intake.off(),
+                        secondSpecimenAuto,
+                        park.build(),
+                        arm.clearGround()
                 )
         );
 
