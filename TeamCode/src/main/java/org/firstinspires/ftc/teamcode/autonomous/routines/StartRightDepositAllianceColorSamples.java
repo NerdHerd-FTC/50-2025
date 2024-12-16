@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Config
-@Autonomous(name="Driver: RIGHT, Deposit Red/Blue in human player area", group="Autonomous")
+@Autonomous(name="Driver: RIGHT, Deposit Red/Blue in human player area", group="Autonomous", preselectTeleOp="Meet 2 TeleOp")
 
 
 public class StartRightDepositAllianceColorSamples extends LinearOpMode {

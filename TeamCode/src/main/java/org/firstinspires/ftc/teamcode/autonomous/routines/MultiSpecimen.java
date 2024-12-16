@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionFactory;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.MecanumDrive;
@@ -18,7 +19,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Config
-@Autonomous(name = "Multi Specimen")
+@Autonomous(name = "Multi Specimen", group="TEST")
+@Disabled
 
 public class MultiSpecimen extends LinearOpMode {
     public Action generatePreloadAuto(MecanumDrive drive, Arm arm, Wrist wrist, Intake intake, Pose2d startPose) {

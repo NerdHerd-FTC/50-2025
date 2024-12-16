@@ -138,8 +138,8 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    final double WRIST_FOLDED_IN   = 0.72;
-    final double WRIST_FOLDED_OUT  = 0.39;
+    public final double WRIST_FOLDED_IN   = 0.58;
+    public final double WRIST_FOLDED_OUT  = 0.26;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;

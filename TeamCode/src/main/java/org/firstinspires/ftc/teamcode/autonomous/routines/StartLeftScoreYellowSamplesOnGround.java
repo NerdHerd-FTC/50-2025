@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 @Config
-@Autonomous(name="Driver: LEFT, Score yellow samples", group="Autonomous")
+@Autonomous(name="Driver: LEFT, Score yellow samples", group="Autonomous", preselectTeleOp="Meet 2 TeleOp")
 
 
 public class StartLeftScoreYellowSamplesOnGround extends LinearOpMode {
