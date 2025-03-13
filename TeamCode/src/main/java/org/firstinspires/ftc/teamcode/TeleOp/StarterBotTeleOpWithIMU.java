@@ -138,8 +138,8 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     final double INTAKE_DEPOSIT    =  0.5;
 
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
-    public final double WRIST_FOLDED_IN   = 0.58;
-    public final double WRIST_FOLDED_OUT  = 0.26;
+    public final double WRIST_FOLDED_IN   = 0.36;
+    public final double WRIST_FOLDED_OUT  = 0.63;
 
     /* A number in degrees that the triggers can adjust the arm position by */
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
@@ -156,7 +156,7 @@ public class StarterBotTeleOpWithIMU extends OpMode {
     Gamepad gamepad2Previous = new Gamepad();
     Gamepad gamepad2Current = new Gamepad();
 
-    final double DRIVE_SPEED = 0.75;
+    final double DRIVE_SPEED = 1;
 
 
     @Override
@@ -337,11 +337,11 @@ public class StarterBotTeleOpWithIMU extends OpMode {
         }
 
         if (gamepad2Current.right_trigger > 0.1) {
-            increaseArmPositionFudgeFactor = gamepad2Current.right_trigger;
+            increaseArmPositionFudgeFactor = gamepad2Current.right_trigger + 0.2;
         }
 
         if (gamepad2Current.left_trigger > 0.1) {
-            decreaseArmPositionFudgeFactor = gamepad2Current.left_trigger;
+            decreaseArmPositionFudgeFactor = gamepad2Current.left_trigger + 0.2;
         }
 
         armPositionFudgeFactor = FUDGE_FACTOR * (increaseArmPositionFudgeFactor + (-decreaseArmPositionFudgeFactor));

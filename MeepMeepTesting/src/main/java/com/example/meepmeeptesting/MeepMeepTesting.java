@@ -11,225 +11,6 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
-//    public static Action submersibleScoring(double offset, TrajectoryActionBuilder previousTrajectory) {
-//        TrajectoryActionBuilder ApproachHPStation = previousTrajectory
-//                .strafeToLinearHeading(new Vector2d(28, -44), Math.toRadians(-45))
-//                .endTrajectory();
-//
-//        TrajectoryActionBuilder IntakeFromHP = ApproachHPStation.fresh()
-//                .strafeTo(new Vector2d(34, -50))
-//                .endTrajectory();
-//
-//        TrajectoryActionBuilder approachSubmersible = IntakeFromHP.fresh()
-//                .strafeToLinearHeading(new Vector2d(8.5 - offset, -46), Math.toRadians(90))
-//                .endTrajectory();
-//
-//        TrajectoryActionBuilder moveToSubmersible = approachSubmersible.fresh()
-//                .strafeToLinearHeading(new Vector2d(8.5 - offset, -42), Math.toRadians(90))
-//                .endTrajectory();
-//
-//        TrajectoryActionBuilder reverseAndScoreSpecimenSlight = moveToSubmersible.fresh()
-//                .strafeTo(new Vector2d((8.5 - offset) + 1, -48))
-//                .endTrajectory();
-//
-//        TrajectoryActionBuilder reverseAndScoreSpecimenFull = reverseAndScoreSpecimenSlight.fresh()
-//                .strafeTo(new Vector2d((8.5 - offset) + 2, -50))
-//                .endTrajectory();
-//
-//        Action auto = new SequentialAction(
-//                ApproachHPStation.build(),
-//                IntakeFromHP.build(),
-//                approachSubmersible.build(),
-//                moveToSubmersible.build(),
-//                reverseAndScoreSpecimenSlight.build(),
-//                reverseAndScoreSpecimenFull.build()
-//        );
-//        return auto;
-//    }
-    public static Action noHome(RoadRunnerBotEntity bot) {
-        Pose2d startPose = new Pose2d(12, -63.5, Math.toRadians(90));
-
-        TrajectoryActionBuilder moveToSubmersibleForPreload = bot.getDrive().actionBuilder(startPose)
-                .strafeTo(new Vector2d(8.5, -42))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScorePreloadSlight = moveToSubmersibleForPreload.fresh()
-                .strafeTo(new Vector2d(9.5, -48))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScorePreloadFull = reverseAndScorePreloadSlight.fresh()
-                .strafeTo(new Vector2d(10.5, -50))
-                .endTrajectory();
-
-        TrajectoryActionBuilder park = reverseAndScorePreloadFull.fresh()
-                .strafeTo(new Vector2d(32, -36))
-
-                .strafeToLinearHeading(new Vector2d(32, -12), Math.toRadians(270))
-                .strafeTo(new Vector2d(45, -12))
-                .strafeTo(new Vector2d(45, -57))
-                .strafeTo(new Vector2d(50, -12))
-                .strafeTo(new Vector2d(53, -12))
-                .strafeTo(new Vector2d(53, -56))
-                .strafeTo(new Vector2d(58, -12))
-                .strafeTo(new Vector2d(61.5, -12))
-                .strafeTo(new Vector2d(61.5, -56))
-
-                .endTrajectory();
-
-        SequentialAction auto1 = new SequentialAction(
-                new ParallelAction(
-                        moveToSubmersibleForPreload.build()
-                ),
-                reverseAndScorePreloadSlight.build(),
-                new ParallelAction(
-                        reverseAndScorePreloadFull.build()
-                ),
-                new ParallelAction(
-                        park.build()
-                )
-        );
-
-        double offset = 2;
-
-        TrajectoryActionBuilder ApproachHPStation = bot.getDrive().actionBuilder(new Pose2d(61.5, -56, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(28, -44), Math.toRadians(-45))
-                .endTrajectory();
-
-        TrajectoryActionBuilder IntakeFromHP = ApproachHPStation.fresh()
-                .strafeTo(new Vector2d(34, -50))
-                .endTrajectory();
-
-        TrajectoryActionBuilder approachSubmersible = IntakeFromHP.fresh()
-                .strafeToLinearHeading(new Vector2d(8.5 - offset, -46), Math.toRadians(90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder moveToSubmersible = approachSubmersible.fresh()
-                .strafeToLinearHeading(new Vector2d(8.5 - offset, -42), Math.toRadians(90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScoreSpecimenSlight = moveToSubmersible.fresh()
-                .strafeTo(new Vector2d((8.5 - offset) + 1, -48))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScoreSpecimenFull = reverseAndScoreSpecimenSlight.fresh()
-                .strafeTo(new Vector2d((8.5 - offset) + 2, -50))
-                .strafeToLinearHeading(new Vector2d(61, -55), Math.toRadians(90))
-                .endTrajectory();
-
-        Action auto2 = new SequentialAction(
-                ApproachHPStation.build(),
-                IntakeFromHP.build(),
-                approachSubmersible.build(),
-                new SequentialAction(
-                        moveToSubmersible.build(),
-                        reverseAndScoreSpecimenSlight.build()
-                ),
-                reverseAndScoreSpecimenFull.build()
-        );
-
-        Action auto = new SequentialAction(
-                auto1,
-                auto2
-        );
-
-        return auto;
-    }
-
-    public static Action home(RoadRunnerBotEntity bot) {
-        Pose2d startPose = new Pose2d(12, -63.5, Math.toRadians(90));
-
-        TrajectoryActionBuilder moveToSubmersibleForPreload = bot.getDrive().actionBuilder(startPose)
-                .strafeTo(new Vector2d(8.5, -42))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScorePreloadSlight = moveToSubmersibleForPreload.fresh()
-                .strafeTo(new Vector2d(9.5, -48))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScorePreloadFull = reverseAndScorePreloadSlight.fresh()
-                .strafeTo(new Vector2d(10.5, -50))
-                .endTrajectory();
-
-        TrajectoryActionBuilder park = reverseAndScorePreloadFull.fresh()
-                .strafeTo(new Vector2d(32, -36))
-
-                .strafeToLinearHeading(new Vector2d(32, -12), Math.toRadians(270))
-                .strafeTo(new Vector2d(45, -12))
-                .strafeTo(new Vector2d(45, -57))
-                .strafeTo(new Vector2d(50, -12))
-                .strafeTo(new Vector2d(53, -12))
-                .strafeTo(new Vector2d(53, -56))
-                .strafeTo(new Vector2d(58, -12))
-                .strafeTo(new Vector2d(61.5, -12))
-                .strafeTo(new Vector2d(61.5, -56))
-
-                .endTrajectory();
-
-        SequentialAction auto1 = new SequentialAction(
-                new ParallelAction(
-                        moveToSubmersibleForPreload.build()
-                ),
-                reverseAndScorePreloadSlight.build(),
-                new ParallelAction(
-                        reverseAndScorePreloadFull.build()
-                ),
-                new ParallelAction(
-                        park.build()
-                )
-        );
-
-        double offset = 2;
-
-        TrajectoryActionBuilder home = bot.getDrive().actionBuilder(new Pose2d(61.5, -56, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(12, -58), Math.toRadians(90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder ApproachHPStation = home.fresh()
-                .strafeToLinearHeading(new Vector2d(28, -44), Math.toRadians(-45))
-                .endTrajectory();
-
-        TrajectoryActionBuilder IntakeFromHP = ApproachHPStation.fresh()
-                .strafeTo(new Vector2d(34, -50))
-                .endTrajectory();
-
-        TrajectoryActionBuilder approachSubmersible = IntakeFromHP.fresh()
-                .strafeToLinearHeading(new Vector2d(8.5 - offset, -46), Math.toRadians(90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder moveToSubmersible = approachSubmersible.fresh()
-                .strafeToLinearHeading(new Vector2d(8.5 - offset, -42), Math.toRadians(90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScoreSpecimenSlight = moveToSubmersible.fresh()
-                .strafeTo(new Vector2d((8.5 - offset) + 1, -48))
-                .endTrajectory();
-
-        TrajectoryActionBuilder reverseAndScoreSpecimenFull = reverseAndScoreSpecimenSlight.fresh()
-                .strafeTo(new Vector2d((8.5 - offset) + 2, -50))
-                .strafeToLinearHeading(new Vector2d(61, -55), Math.toRadians(90))
-                .endTrajectory();
-
-        Action auto2 = new SequentialAction(
-                home.build(),
-                ApproachHPStation.build(),
-                IntakeFromHP.build(),
-                approachSubmersible.build(),
-                new SequentialAction(
-                        moveToSubmersible.build(),
-                        reverseAndScoreSpecimenSlight.build()
-                ),
-                reverseAndScoreSpecimenFull.build()
-        );
-
-        Action auto = new SequentialAction(
-                auto1,
-                auto2
-        );
-
-        return auto;
-    }
-
-
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
@@ -247,8 +28,145 @@ public class MeepMeepTesting {
 
 
 
-        myBot.runAction(noHome(myBot));
-        myBot2.runAction(home(myBot2));
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(15.125, -63, Math.toRadians(90)))
+//                        .splineToLinearHeading(new Pose2d(5.0, -35.0, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -43, Math.toRadians(90)), Math.toRadians(90))
+////                        .strafeTo(new Vector2d(5.0, -43.0))
+//                        .splineToLinearHeading(new Pose2d(49, -42.5, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48.8, -58.5, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(48.8, -48.8, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(59.3, -42.5, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48.8, -58.5, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(48.8, -48.8, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(56.17, -27.87, Math.toRadians(0)), Math.toRadians(0))
+//
+//                        .splineToLinearHeading(new Pose2d(48.8, -58.5, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(48.8, -48.8, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -35.0, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -40.0, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48.8, -58.5, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(48.8, -48.8, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -35.0, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -40.0, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48.8, -58.5, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(48.8, -48.8, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -35.0, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -40.0, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48.8, -58.5, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(48.8, -48.8, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -35.0, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(5.0, -40.0, Math.toRadians(90)), Math.toRadians(90))
+////                        .strafeTo(new Vector2d(5, -35))
+//                //first sample
+//                .strafeTo(new Vector2d(49, -42.5))
+//                //hp
+//                .strafeTo(new Vector2d(48.8, -58.5))
+//                //hp reverse
+//                .strafeTo(new Vector2d(48.8, -48.8))
+//
+//                //2nd sample
+//                .strafeTo(new Vector2d(59.3, -42.5))
+//                //hp
+//                .strafeTo(new Vector2d(48.8, -58.5))
+//                //hp reverse
+//                .strafeTo(new Vector2d(48.8, -48.8))
+//                // 3rd sample
+//                .strafeTo(new Vector2d(56.17, -27.87))
+
+//                        .splineToLinearHeading(new Pose2d(3.0, -35.0, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(3.0, -40.0, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48.5, -39.7, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(48.5, -60, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48.5, -40, Math.toRadians(90)), Math.toRadians(90))
+//
+//                // sweep
+//
+//                        .splineToLinearHeading(new Pose2d(52.8, -10, Math.toRadians(90)), Math.toRadians(0))
+//
+//                //sweep in
+//
+//                        .splineToLinearHeading(new Pose2d(54.5, -52.5, Math.toRadians(90)), Math.toRadians(90))
+//
+//                //sweep  2
+//
+//                        .splineToLinearHeading(new Pose2d(60, -10, Math.toRadians(90)), Math.toRadians(0))
+//
+//                        //sweep in 2
+//
+//                        .splineToLinearHeading(new Pose2d(48.5, -60, Math.toRadians(90)), Math.toRadians(90))
+////
+//                        .splineToLinearHeading(new Pose2d(62, -52.5, Math.toRadians(90)), Math.toRadians(90))
+
+                            //score preload
+                        .splineToLinearHeading(new Pose2d(35, -56.0, Math.toRadians(90)), Math.toRadians(90))
+                        .splineToLinearHeading(new Pose2d(35, -10, Math.toRadians(90)), Math.toRadians(90))
+
+                        .splineToLinearHeading(new Pose2d(42, -10, Math.toRadians(90)), Math.toRadians(90))
+                        .splineToLinearHeading(new Pose2d(42, -56, Math.toRadians(90)), Math.toRadians(90))
+
+                        .splineToLinearHeading(new Pose2d(42, -10, Math.toRadians(90)), Math.toRadians(90))
+                        .splineToLinearHeading(new Pose2d(50, -10, Math.toRadians(90)), Math.toRadians(90))
+                        .splineToLinearHeading(new Pose2d(50, -56, Math.toRadians(90)), Math.toRadians(90))
+
+                        .splineToLinearHeading(new Pose2d(50, -10, Math.toRadians(90)), Math.toRadians(90))
+                        .splineToLinearHeading(new Pose2d(58, -10, Math.toRadians(90)), Math.toRadians(90))
+                        .splineToLinearHeading(new Pose2d(58, -56, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(40, -57, Math.toRadians(90)), Math.toRadians(270))
+//
+//                        .splineToLinearHeading(new Pose2d(40, -20, Math.toRadians(90)), Math.toRadians(270))
+//                        .splineToLinearHeading(new Pose2d(48, -20, Math.toRadians(90)), Math.toRadians(270))
+//
+//                        .splineToLinearHeading(new Pose2d(47, -57, Math.toRadians(90)), Math.toRadians(270))
+//                        .splineToLinearHeading(new Pose2d(47, -20, Math.toRadians(90)), Math.toRadians(270))
+
+
+                //spec
+//                        .splineToLinearHeading(new Pose2d(48, -47, Math.toRadians(90)), Math.toRadians(270))
+//                        .splineToLinearHeading(new Pose2d(3.0, -33.0, Math.toRadians(90)), Math.toRadians(90))
+//                        .splineToLinearHeading(new Pose2d(3.0, -52.0, Math.toRadians(90)), Math.toRadians(90))
+//
+//                        .splineToLinearHeading(new Pose2d(48, -50, Math.toRadians(90)), Math.toRadians(0))
+//                        .waitSeconds(0.5)
+//                        .splineToLinearHeading(new Pose2d(48, -53, Math.toRadians(90)), Math.toRadians(0))
+//                        .waitSeconds(1)
+//                        .splineToLinearHeading(new Pose2d(48, -47, Math.toRadians(90)), Math.toRadians(0))
+
+//                        // 1st sample pickup
+//                        .splineToLinearHeading(new Pose2d(48.5, -42.0, Math.toRadians(90)), Math.toRadians(90))
+////
+//                //bring first sample back
+//                        .splineToLinearHeading(new Pose2d(48.5, -60, Math.toRadians(90)), Math.toRadians(90))
+////
+////                        .splineToLinearHeading(new Pose2d(48.5, -40, Math.toRadians(90)), Math.toRadians(90))
+////                        .splineToLinearHeading(new Pose2d(46, -40, Math.toRadians(90)), Math.toRadians(90))
+////                        .waitSeconds(1)
+//                        // go to 2nd sample sweep
+//
+//                        .splineToLinearHeading(new Pose2d(52.5, -10, Math.toRadians(90)), Math.toRadians(0))
+//                //sweep
+//                        .strafeTo(new Vector2d(52.5, -52.5))
+//
+//                        .splineToLinearHeading(new Pose2d(56, -47, Math.toRadians(90)), Math.toRadians(0))
+////
+////
+////                        .splineToLinearHeading(new Pose2d(50.5, -32.5, Math.toRadians(90)), Math.toRadians(90))
+//                        //sweep prep 3
+//                        .splineToLinearHeading(new Pose2d(54.5, -10, Math.toRadians(90)), Math.toRadians(0))
+//                        //sweep 3
+//                        .strafeTo(new Vector2d(54.5, -52.5))
+
+
+
+                        .build()
+        );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
